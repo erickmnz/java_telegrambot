@@ -14,8 +14,8 @@ public interface BookRepository extends JpaRepository<Book, Integer >{
 	List<String> getContentById(Integer id);
 	@Query("Select u.content from Book u where u.bookTitle =?1 ")
 	List<String> getContentByTitle(String title);
-	@Query("Select u.bookTitle from Book u where u.bookTitle like %?1%")
-	List<String> searchByTitle(String title);
+	@Query("Select u from Book u where u.bookTitle like %?1%")
+	List<Book> searchByTitle(String title);
 	@Query("Select u.content from Book u")
 	List<String> getAllContents();
 }

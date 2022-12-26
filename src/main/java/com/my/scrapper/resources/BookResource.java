@@ -16,7 +16,7 @@ import com.my.scrapper.services.BookService;
 @RestController
 @RequestMapping(value="/books")
 public class BookResource {
-
+	/**
 	@Autowired
 	private BookService service;
 	
@@ -49,4 +49,5 @@ public class BookResource {
 		}
 		return ResponseEntity.ok().body(c);
 	}
+**/
 }

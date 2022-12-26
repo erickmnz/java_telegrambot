@@ -25,7 +25,7 @@ public class BookService {
 		return repo.getContentByTitle(title);
 	}
 
-	public List<String> searchByTitle(String title) {
+	public List<Book> searchByTitle(String title) {
 		return repo.searchByTitle(title);
 	}
 	

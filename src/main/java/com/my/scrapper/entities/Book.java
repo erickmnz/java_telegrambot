@@ -94,7 +94,7 @@ public class Book implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(bookTitle);
 	}
 
 	@Override
@@ -106,9 +106,10 @@ public class Book implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Book other = (Book) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(bookTitle, other.bookTitle);
 	}
-	
+
+
 	
 
 }
