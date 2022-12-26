@@ -32,8 +32,8 @@ public class BotHandler extends TelegramLongPollingBot {
 	private BookRepository bookRepo;
 	@Autowired
 	private PdfDocRepository pdfRepo;
-	private boolean search;
-
+	private Integer randomness = 2;
+	private Integer size = 5;
 	@Override
 	public String getBotUsername() {
 		return "";
@@ -62,6 +62,8 @@ public class BotHandler extends TelegramLongPollingBot {
 		
 	}
 
+	
+	
 	public void searchByTitle(Long id, Message msg) {
 		
 		if (msg.hasText()) {
@@ -178,7 +180,7 @@ public class BotHandler extends TelegramLongPollingBot {
 		
 		String sc = bookRepo.getAllContents().toString() +" "+ pdff; ;
 		try {
-			String mkv = Markov.generate(sc, 2,10 );
+			String mkv = Markov.generate(sc, this.randomness,this.size );
 			sendMsg(msg.getChatId(),mkv);
 
 		} catch (IOException e) {
@@ -188,14 +190,30 @@ public class BotHandler extends TelegramLongPollingBot {
 	
 	}
 	
-	public void getPdfContent(Message msg) {
-		String pdff = "";
-		
-		for(byte[] arr: pdfRepo.getAllContents()) {
-			pdff += new String(arr,StandardCharsets.UTF_8);
+	public void setRandom(Message msg) {
+		String text = msg.getText();
+		Integer num = Integer.parseInt(text.substring(text.indexOf(" ")).trim());
+		if(num<2||num>20) {
+			sendMsg(msg.getChatId(), "Random parameter must be between 2 and 20");
+			this.randomness = 2;
+			return;
 		}
-		sendMsg(msg.getChatId(),pdff);
+		
+		this.randomness = num;
 	}
+	
+	public void msgSize(Message msg) {
+		String text = msg.getText();
+		Integer num = Integer.parseInt(text.substring(text.indexOf(" ")).trim());
+		if(num<5||num>200) {
+			sendMsg(msg.getChatId(), "Size parameter must be between 5 and 200");
+			this.size = 5;
+			return;
+		}
+		
+		this.size = num;
+	}
+	
 	public void commands(Update up) {
 		Message a = up.getMessage();	
 		String aa = a.getText().indexOf(" ")<0?a.getText():a.getText().substring(0, a.getText().indexOf(" "));
@@ -210,6 +228,11 @@ public class BotHandler extends TelegramLongPollingBot {
 			}case "/set_timer":{
 				setTime(a);
 			
+			}case "/set_random":{
+				setRandom(a);
+			}
+			case "/set_size":{
+				msgSize(a);
 			}
 		}
 		
